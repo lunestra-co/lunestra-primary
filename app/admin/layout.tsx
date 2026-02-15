@@ -45,7 +45,8 @@ const ADMIN_ROUTES = [
 ];
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, adminUsername, login, logout, loading } = useAdminAuth();
+  const { isAuthenticated, adminUsername, login, logout, loading } =
+    useAdminAuth();
   const { loadAllData } = useAdmin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -57,7 +58,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
-    
+
     if (login(username, password)) {
       setUsername("");
       setPassword("");
@@ -96,9 +97,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen bg-brandblack flex items-center justify-center p-6 bg-[url('https://images.unsplash.com/photo-1617038220319-33fc2e608c54?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
         <div className="relative z-10 bg-white p-12 max-w-md w-full shadow-2xl text-center">
-          <h1 className="text-3xl mb-2 text-brandblack">
-            Admin Portal
-          </h1>
+          <h1 className="text-3xl mb-2 text-brandblack">Admin Portal</h1>
           <p className="text-xs text-gray-500 uppercase tracking-widest mb-8">
             Restricted Access
           </p>
@@ -122,7 +121,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               placeholder="Password"
               className="w-full bg-gray-50 border border-gray-200 p-4 text-center focus:outline-none focus:border-gold transition-colors"
             />
-              <Button type="submit" className="w-full bg-brandblack text-white hover:bg-gold">
+            <Button
+              type="submit"
+              className="w-full bg-brandblack text-white hover:bg-gold"
+            >
               Enter Dashboard
             </Button>
           </form>
@@ -181,9 +183,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           <aside className="relative w-64 bg-brandblack text-white h-full overflow-y-auto">
             <div className="p-8 border-b border-white/10 flex justify-between items-center">
               <div>
-                <span className="text-2xl tracking-wide">
-                  Lunestra
-                </span>
+                <span className="text-2xl tracking-wide">Lunestra</span>
                 <span className="block text-[10px] text-gold uppercase tracking-widest mt-1">
                   Admin Console
                 </span>
@@ -243,7 +243,9 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 {adminUsername?.charAt(0).toUpperCase() || "A"}
               </div>
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-gray-900">{adminUsername || "Admin"}</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {adminUsername || "Admin"}
+                </p>
                 <p className="text-xs text-gray-500">Super Admin</p>
               </div>
             </div>
