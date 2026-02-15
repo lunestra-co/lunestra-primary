@@ -214,7 +214,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
             <div className="absolute bottom-0 left-0 w-full p-4 border-t border-white/10">
               <button
-                onClick={() => setIsAuthenticated(false)}
+                onClick={handleLogout}
                 className="w-full flex items-center gap-4 px-4 py-3 text-sm text-gray-400 hover:text-red-400 transition-colors"
               >
                 <LogOut className="w-5 h-5" /> Sign Out
