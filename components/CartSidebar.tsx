@@ -13,6 +13,7 @@ const CART_KEY = "cartItems";
 export interface CartItem {
   productId: string;
   need_cert: boolean;
+  selectedSize?: string;
 }
 
 export function getCartItems(): CartItem[] {
@@ -25,10 +26,14 @@ export function getCartItems(): CartItem[] {
   }
 }
 
-export function addToCart(productId: string, need_cert: boolean = false) {
+export function addToCart(
+  productId: string,
+  need_cert: boolean = false,
+  selectedSize?: string,
+) {
   const items = getCartItems();
   if (!items.some((item) => item.productId === productId)) {
-    items.push({ productId, need_cert });
+    items.push({ productId, need_cert, selectedSize });
     localStorage.setItem(CART_KEY, JSON.stringify(items));
     window.dispatchEvent(new Event("cart-updated"));
   }
@@ -51,11 +56,21 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
       const ids = items.map((item) => item.productId);
       if (ids.length > 0) {
         const supabase = createClient();
-        const { data: products, error } = await supabase
-          .from("products")
+        // Fetch from both gem_products and jewellery_products tables
+        const { data: gemProducts, error: gemError } = await supabase
+          .from("gem_products")
           .select("*, category:category_id(name, slug)")
           .in("id", ids);
-        setProducts(products || []);
+        const { data: jewelleryProducts, error: jewError } = await supabase
+          .from("jewellery_products")
+          .select("*, category:category_id(name, slug)")
+          .in("id", ids);
+
+        const allProducts = [
+          ...(gemProducts || []),
+          ...(jewelleryProducts || []),
+        ];
+        setProducts(allProducts || []);
       } else {
         setProducts([]);
       }
@@ -107,6 +122,10 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
+  // Import useRouter from next/navigation
+  const { useRouter } = require("next/navigation");
+  const router = useRouter();
+
   return (
     show && (
       <div className="fixed inset-0 z-50">
@@ -119,7 +138,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
         {/* Sidebar */}
         <div
           ref={sidebarRef}
-          className={`fixed top-0 right-0 h-screen w-120 bg-ivory shadow-2xl z-50 border-l border-gold/20 transition-transform duration-300 ${sidebarVisible ? "translate-x-0" : "translate-x-full"}`}
+          className={`fixed top-0 right-0 h-screen w-screen lg:w-120 bg-ivory shadow-2xl z-50 border-l border-gold/20 transition-transform duration-300 ${sidebarVisible ? "translate-x-0" : "translate-x-full"}`}
           style={{ fontFamily: "var(--font-sans)" }}
         >
           <div className="flex flex-col h-full">
@@ -215,6 +234,11 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                               Certificate Requested
                             </div>
                           )}
+                          {cartItem?.selectedSize && (
+                            <div className="inline-block text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-300 font-semibold mt-1 ml-2">
+                              Size: {cartItem.selectedSize}
+                            </div>
+                          )}
                         </div>
                         <button
                           className="text-red-400 hover:text-white hover:bg-red-500 border border-red-200 rounded-full px-2 py-2 transition-colors font-normal"
@@ -242,7 +266,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                   <span className="font-serif text-lg text-brandblack">
                     Subtotal
                   </span>
-                  <span className="font-serif text-xl text-gold font-bold">
+                  <span className="font-serif text-xl text-gold font-bold lining-nums">
                     {(() => {
                       let subtotal = 0;
                       products.forEach((product) => {
@@ -266,9 +290,10 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                 <div className="flex flex-col">
                   <button
                     className="flex-1 py-4 bg-gold/80 text-white font-bold uppercase tracking-wider text-sm hover:bg-gold transition-colors cursor-pointer"
-                    onClick={() =>
-                      alert("Proceed to checkout (implement logic)")
-                    }
+                    onClick={() => {
+                      onClose();
+                      setTimeout(() => router.push("/checkout"), 200);
+                    }}
                   >
                     Checkout
                   </button>

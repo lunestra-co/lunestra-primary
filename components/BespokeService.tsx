@@ -51,21 +51,22 @@ export default function BespokeService() {
             <div className="flex items-center gap-4">
               <div className="w-10 h-px bg-gold" />
               <span className="text-gold uppercase tracking-[0.3em] text-[10px] font-medium">
-                Bespoke Services
+                The Gift of Choice
               </span>
             </div>
 
             <h2 className="font-serif text-4xl lg:text-5xl xl:text-6xl leading-[1.1]">
-              Craft Your
+              Let Them Design
               <br />
-              <span className="italic text-gold/80">Legacy</span>
+              <span className="text-gold/80 italic">Their Forever</span>
             </h2>
 
             <p className="text-gray-400 leading-relaxed max-w-md text-[15px]">
-              True luxury is personal. Our Bespoke Service invites you to
-              collaborate with our master jewelers to design a piece that tells
-              your unique story. From selecting the rough stone to the final
-              polish, you are the architect of your own heirloom.
+              True luxury is personal. Your certified gemstone arrives with an
+              exclusive crafting voucher—a gift that invites your loved one to
+              collaborate with our partnering master jewelers. From design
+              vision to final setting, they become the architect of their own
+              heirloom.
             </p>
 
             <ul className="space-y-5 border-t border-white/10 pt-10">
@@ -74,7 +75,7 @@ export default function BespokeService() {
                   <span className="w-2 h-2 bg-gold rounded-full" />
                 </div>
                 <span className="text-[14px] text-gray-300">
-                  Private Consultation with Master Gemologist
+                  Certified Gemstone Delivered to You
                 </span>
               </li>
               <li className="flex items-center gap-4">
@@ -82,7 +83,7 @@ export default function BespokeService() {
                   <span className="w-2 h-2 bg-gold rounded-full" />
                 </div>
                 <span className="text-[14px] text-gray-300">
-                  Custom CAD Design & 3D Prototyping
+                  Exclusive Voucher to Partnering Ateliers
                 </span>
               </li>
               <li className="flex items-center gap-4">
@@ -90,7 +91,7 @@ export default function BespokeService() {
                   <span className="w-2 h-2 bg-gold rounded-full" />
                 </div>
                 <span className="text-[14px] text-gray-300">
-                  Ethical Sourcing Documentation
+                  Personal Design Consultation for Recipient
                 </span>
               </li>
             </ul>
@@ -98,7 +99,7 @@ export default function BespokeService() {
             <div className="pt-6">
               <a href="#shops" className="group inline-flex items-center gap-4">
                 <span className="border border-white/30 text-white px-8 py-4 text-[11px] uppercase tracking-[0.2em] transition-all duration-500 group-hover:border-gold group-hover:bg-gold group-hover:text-brandblack">
-                  Start Your Journey
+                  Discover Our Partners →
                 </span>
                 <ArrowRight className="w-5 h-5 text-gold transition-transform group-hover:translate-x-2" />
               </a>

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Button from "@/components/Button";
 
-import { inquiryService } from "@/services/InquiryService";
+import { createInquiry } from "@/services/InquiryService";
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -22,11 +22,17 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await inquiryService.create({
-      customerName: formState.name,
-      phone: formState.phone,
-      subject: formState.subject,
+    // Map form fields to InquiryData fields as needed
+    await createInquiry({
+      product_id: "", // Provide appropriate value or update form to collect
+      product_type: "contact", // Or another suitable value
+      product_name: "Contact Inquiry", // Or another suitable value
+      customer_name: formState.name,
+      email: "", // Provide appropriate value or update form to collect
+      whatsapp_number: formState.phone,
       message: formState.message,
+      status: "new", // Or another suitable default
+      // user_id will be auto-injected in createInquiry
     });
     alert("Thank you for your inquiry. A concierge will respond shortly.");
     setFormState({ name: "", phone: "", subject: "", message: "" });

@@ -1,8 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { Product } from "@/types";
-import ProductActions from "@/components/ProductActions";
-import InquiryModal from "@/components/InquiryModal";
 import {
   Shield,
   Play,
@@ -19,6 +15,9 @@ import {
   House,
 } from "lucide-react";
 import RequestQuotationBanner from "@/components/RequestQuotationBanner";
+import ProductActions from "@/components/ProductActions";
+import JewelleryProductDetails from "@/components/JewelleryProductDetails";
+import { createClient } from "@/lib/supabase/server";
 
 type PageProps = {
   params: { variety: string; product: string };
@@ -30,10 +29,10 @@ export default async function ProductDetailPage(props: PageProps) {
     params = await (params as any);
   }
   const supabase = await createClient();
-  const { product: productSlug } = params;
+  const { product: productSlug, variety } = params;
   // Fetch product by slug
   const { data: product, error } = await supabase
-    .from("gem_products")
+    .from("jewellery_products")
     .select("*, category:category_id(name, slug)")
     .eq("slug", productSlug)
     .single();
@@ -41,33 +40,31 @@ export default async function ProductDetailPage(props: PageProps) {
     return notFound();
   }
 
-  // Simulated Comparison Data (updated to use new fields)
+  // Simulated Comparison Data for jewellery
   const comparisonData = {
     market: {
-      clarity: "VS1",
-      certification: "GIA",
-      treatment: "Heated",
-      transparency: "Transparent",
+      accent_stones: "VVS Diamonds",
+      purity_hallmark: "Au 750",
+      setting_style: "Prong",
+      craftsmanship: "Handmade",
     },
-    thisGem: {
-      clarity: product.clarity || "Eye Clean",
-      certification: product.certification || "On Request",
-      treatment: product.treatment,
-      transparency: product.transparency,
+    thisJewel: {
+      accent_stones: product.secondary_gem_details || "On Request",
+      purity_hallmark: product.hallmark_details || "Au 750",
+      setting_style: product.setting_type || "Artisan",
+      craftsmanship: product.craftsmanship || "Handmade",
     },
   };
 
-  // Collector mode is always enabled (no switch)
   const viewMode = "collector";
-  const images = [product.image, ...(product.gallery || [])];
-
-  // Video controls and toggling are omitted in server component
-  // If you want toggling, refactor this section into a client component
+  const gallery =
+    typeof product.gallery === "string"
+      ? JSON.parse(product.gallery || "[]")
+      : product.gallery || [];
+  const images = [product.image, ...gallery];
 
   return (
     <>
-      <InquiryModal product={product} productType="gem" />
-      {/* ProductActions client component handles modal and buttons */}
       <div className="bg-white min-h-screen">
         <div className="mx-auto">
           <div className="flex flex-col lg:flex-row lg:relative">
@@ -152,19 +149,19 @@ export default async function ProductDetailPage(props: PageProps) {
                     <div className="absolute bottom-6 left-6 text-white text-sm uppercase tracking-tight font-bold">
                       Packaging details only.
                       <br />
-                      The gemstone is not represented.
+                      The item is not represented.
                     </div>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* RIGHT: Fixed Details Panel - Internal Scroll if needed */}
+            {/* RIGHT: Fixed Details Panel */}
             <div className="lg:w-1/2 bg-white lg:sticky lg:top-20 lg:self-start lg:h-[calc(100vh-81px)] lg:overflow-y-auto custom-scrollbar">
               <div className="p-6 lg:p-10 flex flex-col">
                 {/* Top Section */}
                 <div>
-                  {/* Header & Toggle */}
+                  {/* Header & Breadcrumb */}
                   <div className="flex justify-between items-center mb-6">
                     <nav
                       className="flex items-center space-x-2 text-md pb-4"
@@ -179,14 +176,14 @@ export default async function ProductDetailPage(props: PageProps) {
                       </a>
                       <span className="text-gray-400">/</span>
                       <a
-                        href="/gems"
+                        href="/jewellery"
                         className="text-gray-500 hover:text-gold flex items-center leading-5"
                       >
-                        Gems
+                        Jewellery
                       </a>
                       <span className="text-gray-400">/</span>
                       <a
-                        href={`/gems/${product.category.slug}`}
+                        href={`/jewellery/${variety}`}
                         className="text-gray-500 hover:text-gold flex items-center leading-5"
                       >
                         {product.category.name}
@@ -206,9 +203,7 @@ export default async function ProductDetailPage(props: PageProps) {
                   {/* Origin & Actions */}
                   <div className="flex justify-between items-start mb-4">
                     <span className="inline-block py-1 px-3 border border-brandblack text-[9px] uppercase tracking-widest font-medium">
-                      {Array.isArray(product.origin)
-                        ? product.origin.join(", ")
-                        : product.origin}
+                      {product.metal_type}
                     </span>
                     <div className="flex gap-4">
                       <button
@@ -290,84 +285,67 @@ export default async function ProductDetailPage(props: PageProps) {
                   <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-y border-gray-100 py-6 mb-6">
                     <div>
                       <span className="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">
-                        Weight
+                        Metal Type
                       </span>
                       <span className="font-serif text-lg">
-                        {product.weight} ct
+                        {product.metal_type}
                       </span>
                     </div>
                     <div>
                       <span className="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">
-                        Shape
+                        Collection
                       </span>
                       <span className="font-serif text-lg">
-                        {product.shape}
+                        {product.collection}
                       </span>
                     </div>
                     <div>
                       <span className="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">
-                        Color
+                        Primary Stone
                       </span>
                       <span className="font-serif text-lg">
-                        {product.color}
+                        {product.primary_gem_type
+                          ? `${product.primary_gem_type} (${product.primary_gem_shape})`
+                          : "None"}
                       </span>
                     </div>
                     <div>
                       <span className="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">
-                        Dimensions
+                        Style
                       </span>
                       <span className="font-serif text-lg">
-                        {product.dimensions}
+                        {product.style || "Classic"}
                       </span>
                     </div>
                   </div>
-                </div>
 
-                {/* Actions Section */}
-                <div className="space-y-4">
-                  {/* Buy Now & Add to Cart */}
-                  <ProductActions
+                  <JewelleryProductDetails
                     product={product}
                     pricingType={product.pricing_type || "priced"}
                     canGetCertificate={product.can_get_certificate || false}
                     certificatePrice={product.certificate_price || 1000}
                     certificateDescription={
                       product.certificate_description ||
-                      "Includes GIA certification and detailed gemological report"
+                      "Includes detailed authenticity certificate and care instructions"
                     }
                   />
-
-                  {/* Secondary Actions */}
-                  <div className="flex gap-4">
-                    <a
-                      href="https://wa.me/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex-1 py-3 border border-gray-200 hover:border-brandblack text-brandblack flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-colors"
-                    >
-                      <MessageCircleMore className="w-4 h-4" /> Concierge
-                    </a>
-                  </div>
-
-                  {/* Trust Indicators removed as requested */}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Rarity & Story Section (Below Fold) - CONDITIONAL */}
-        {/* Collector mode is always enabled; rarity & story section always shown */}
+        {/* Rarity & Story Section (Below Fold) */}
         <div className="bg-ivory py-24 lg:py-32">
           <div className="max-w-5xl mx-auto px-6 lg:px-12">
             <div className="flex flex-col lg:flex-row gap-16 items-center">
               <div className="lg:w-1/2">
                 <h2 className="font-serif text-3xl mb-6 text-brandblack">
-                  A Rarity Among Rarities
+                  A Treasure Worth Keeping
                 </h2>
                 <p className="font-sans font-light text-gray-600 leading-relaxed mb-8">
                   {product.description ||
-                    "This gemstone exhibits a rare combination of high clarity and intense saturation, placing it in the top 5% of its category. Sourced ethically and verified by world-leading gemological laboratories, it represents both a stunning adornment and a tangible asset."}
+                    "This jewellery piece is a rare combination of exceptional craftsmanship and timeless design. Each detail has been carefully considered to create a treasure that transcends trends and becomes a cherished heirloom."}
                 </p>
 
                 <div className="grid grid-cols-2 gap-8">
@@ -392,7 +370,7 @@ export default async function ProductDetailPage(props: PageProps) {
               <div className="lg:w-1/2 bg-white p-10 shadow-xl shadow-black/5">
                 <h3 className="font-serif text-xl mb-6">Technical Analysis</h3>
                 <div className="space-y-4">
-                  {Object.entries(comparisonData.thisGem).map(
+                  {Object.entries(comparisonData.thisJewel).map(
                     ([key, value]) => (
                       <div
                         key={key}
@@ -402,7 +380,7 @@ export default async function ProductDetailPage(props: PageProps) {
                           {key}
                         </span>
                         <span className="font-serif text-brandblack">
-                          {value}
+                          {String(value)}
                         </span>
                       </div>
                     ),
@@ -412,8 +390,6 @@ export default async function ProductDetailPage(props: PageProps) {
             </div>
           </div>
         </div>
-
-        {/* Curated Recommendations Section removed for server component */}
       </div>
       <RequestQuotationBanner />
     </>

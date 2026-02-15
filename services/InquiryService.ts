@@ -1,59 +1,106 @@
-export interface Inquiry {
-  id: string;
-  date: string;
-  customerName: string;
-  phone: string;
-  subject: string;
-  message: string;
-  status: "New" | "Read" | "Responded";
+import { createClient } from "@/lib/supabase/client";
+import { Tables } from "@/database.types";
+
+export type ProductInquiry = Tables<"product_inquiries">;
+
+export interface InquiryData {
+  product_id: string;
+  product_type: string;
+  product_name: string;
+  product_details?: string | null;
+  customer_name: string;
+  email: string;
+  whatsapp_number: string;
+  message?: string | null;
+  status: string;
+  user_id?: string | null;
 }
 
-const STORAGE_KEY = "lunestra_inquiries";
+export async function createInquiry(inquiryData: InquiryData) {
+  const supabase = createClient();
 
-const MOCK_INQUIRIES: Inquiry[] = [
-  {
-    id: "INQ-001",
-    date: new Date().toISOString(),
-    customerName: "Alice Freeman",
-    phone: "+94 77 123 4567",
-    subject: "Bespoke Inquiry",
-    message: "I am interested in a custom emerald ring.",
-    status: "Read",
-  },
-];
-
-class InquiryService {
-  private init() {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(MOCK_INQUIRIES));
-    }
+  // Try to get user id if authenticated
+  let userId = null;
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    userId = user?.id ?? null;
+  } catch {
+    userId = null;
   }
 
-  getAll(): Promise<Inquiry[]> {
-    return new Promise((resolve) => {
-      this.init();
-      const stored = localStorage.getItem(STORAGE_KEY);
-      resolve(stored ? JSON.parse(stored) : []);
-    });
+  const { data, error } = await supabase
+    .from("product_inquiries")
+    .insert([{ ...inquiryData, user_id: userId }])
+    .select();
+
+  if (error) {
+    throw new Error(`Failed to create inquiry: ${error.message}`);
   }
 
-  create(inquiry: Omit<Inquiry, "id" | "date" | "status">): Promise<void> {
-    return new Promise((resolve) => {
-      this.getAll().then((inquiries) => {
-        const newInquiry: Inquiry = {
-          ...inquiry,
-          id: `INQ-${Date.now().toString().slice(-4)}`,
-          date: new Date().toISOString(),
-          status: "New",
-        };
-        const updated = [newInquiry, ...inquiries];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        resolve();
-      });
-    });
-  }
+  return data?.[0];
 }
 
-export const inquiryService = new InquiryService();
+export async function getInquiries() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("product_inquiries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(`Failed to fetch inquiries: ${error.message}`);
+  }
+
+  return data || [];
+}
+
+export async function getInquiryById(id: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("product_inquiries")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to fetch inquiry: ${error.message}`);
+  }
+
+  return data;
+}
+
+export async function updateInquiryStatus(id: string, status: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("product_inquiries")
+    .update({
+      status,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    throw new Error(`Failed to update inquiry: ${error.message}`);
+  }
+
+  return data?.[0];
+}
+
+export async function deleteInquiry(id: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("product_inquiries")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Failed to delete inquiry: ${error.message}`);
+  }
+}

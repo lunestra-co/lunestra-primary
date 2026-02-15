@@ -1,18 +1,17 @@
-import { createClient } from "@/lib/supabase/server";
 import { Suspense } from "react";
 import { ArrowRight, Home as House } from "lucide-react";
 import RequestQuotationBanner from "@/components/RequestQuotationBanner";
+import { createClient } from "@/lib/supabase/server";
 
 async function CategoriesData() {
   const supabase = await createClient();
   const { data: categories, error } = await supabase
     .from("categories")
     .select()
-    .eq("type", "gemstone");
+    .eq("type", "jewellery");
   if (error) {
     return <div className="text-red-500">Failed to load categories.</div>;
   }
-
   return (
     <>
       <div className="bg-white min-h-screen">
@@ -30,11 +29,11 @@ async function CategoriesData() {
               <span className="sr-only">Home</span>
             </a>
             <span className="text-gray-400">/</span>
-            <span className="text-brandblack font-normal">Gems</span>
+            <span className="text-brandblack font-normal">Jewellery</span>
           </nav>
           {/* Minimalist Hero */}
           <h1 className="font-serif text-5xl lg:text-6xl tracking-tighter text-brandblack mb-8">
-            Our Gems – Rare & Timeless
+            Our Jewellery – Crafted with Purpose
           </h1>
         </div>
 
@@ -44,7 +43,7 @@ async function CategoriesData() {
             {categories?.map((category) => (
               <a
                 key={category.id}
-                href={`/gems/${category.slug}`}
+                href={`/jewellery/${category.slug}`}
                 className="group block"
               >
                 {/* Image */}
@@ -86,7 +85,7 @@ async function CategoriesData() {
 
 export default function Categories() {
   return (
-    <Suspense fallback={<div>Loading categories...</div>}>
+    <Suspense fallback={<div>Loading jewellery categories...</div>}>
       <CategoriesData />
     </Suspense>
   );

@@ -1,10 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { Home as House } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
 type PageProps = {
   params: { variety: string };
-  searchParams?: { price?: string; weight?: string };
+  searchParams?: { price?: string; size?: string };
 };
 
 export default async function CollectionPage(props: PageProps) {
@@ -20,7 +20,7 @@ export default async function CollectionPage(props: PageProps) {
   let category = null;
   let catError = null;
   let query = supabase
-    .from("gem_products")
+    .from("jewellery_products")
     .select("*, category:category_id(name)");
   if (variety !== "all") {
     const catRes = await supabase
@@ -42,18 +42,18 @@ export default async function CollectionPage(props: PageProps) {
     if (!isNaN(min)) query = query.gte("price", min);
     if (!isNaN(max)) query = query.lte("price", max);
   }
-  // Weight range filter
-  if (searchParams?.weight) {
-    const [min, max] = searchParams.weight.split("-").map(Number);
-    if (!isNaN(min)) query = query.gte("weight", min);
-    if (!isNaN(max)) query = query.lte("weight", max);
-  }
 
-  const { data: products, error: prodError } = await query;
+  const { data: products, error: productsError } = await query;
 
-  if (prodError) {
+  if (productsError) {
     return <div className="text-red-500">Failed to load products.</div>;
   }
+
+  if (!products || products.length === 0) {
+    return notFound();
+  }
+
+  const categoryName = products[0].category.name;
 
   return (
     <div className="bg-white min-h-screen">
@@ -72,19 +72,19 @@ export default async function CollectionPage(props: PageProps) {
           </a>
           <span className="text-gray-400">/</span>
           <a
-            href="/"
+            href="/jewellery"
             className="text-gray-500 hover:text-gold flex items-center"
           >
-            Gems
+            Jewellery
           </a>
           <span className="text-gray-400">/</span>
           <span className="text-brandblack font-normal">
-            {variety === "all" ? "All Gems" : category?.name + " Collection"}
+            {categoryName} Collection
           </span>
         </nav>
         {/* Minimalist Hero */}
         <h1 className="font-serif text-5xl lg:text-6xl tracking-tighter text-brandblack mb-8">
-          {variety === "all" ? "All Gems" : category?.name + " Collection"}
+          {categoryName} Collection
         </h1>
       </div>
 
@@ -92,10 +92,10 @@ export default async function CollectionPage(props: PageProps) {
       <div className="mx-auto px-6 lg:px-16 pb-24">
         {products && products.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-12">
-            {products.map((product) => (
+            {products.map((product: any) => (
               <a
                 key={product.id}
-                href={`/gems/${variety}/${product.slug}`}
+                href={`/jewellery/${variety}/${product.slug}`}
                 className="group cursor-pointer flex flex-col"
               >
                 <div className="relative w-full aspect-square overflow-hidden bg-white mb-6 shadow-lg shadow-black/5">
@@ -129,9 +129,9 @@ export default async function CollectionPage(props: PageProps) {
                 </div>
                 <div className="text-center space-y-3 px-2">
                   <div className="flex justify-center items-center gap-3 text-[9px] uppercase tracking-[0.15em] text-gray-400">
-                    <span>{product.category?.name}</span>
+                    <span>{product.category.name}</span>
                     <span className="w-1 h-1 bg-gold rounded-full" />
-                    <span>{product.weight} Carats</span>
+                    <span>{product.metal_type}</span>
                   </div>
                   <h3 className="font-serif text-xl text-brandblack group-hover:text-gold transition-colors duration-300">
                     {product.name}
@@ -172,7 +172,7 @@ export default async function CollectionPage(props: PageProps) {
         ) : (
           <div className="py-24 text-center">
             <h2 className="font-serif text-2xl text-gray-400">
-              No treasures match your criteria.
+              No jewellery matches your criteria.
             </h2>
           </div>
         )}

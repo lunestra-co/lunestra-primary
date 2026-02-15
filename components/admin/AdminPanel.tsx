@@ -189,7 +189,7 @@ export default function AdminPanel() {
       <div className="min-h-screen bg-brandblack flex items-center justify-center p-6 bg-[url('https://images.unsplash.com/photo-1617038220319-33fc2e608c54?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
         <div className="relative z-10 bg-white p-12 max-w-md w-full shadow-2xl text-center">
-          <h1 className="font-serif text-3xl mb-2 text-brandblack">
+          <h1 className="text-3xl mb-2 text-brandblack">
             Admin Portal
           </h1>
           <p className="text-xs text-gray-500 uppercase tracking-widest mb-8">
@@ -217,7 +217,7 @@ export default function AdminPanel() {
       {/* Sidebar */}
       <aside className="w-64 bg-brandblack text-white flex-shrink-0 sticky top-0 h-screen overflow-y-auto hidden lg:block">
         <div className="p-8 border-b border-white/10">
-          <span className="font-serif text-2xl tracking-wide">Lunestra</span>
+          <span className="text-2xl tracking-wide">Lunestra</span>
           <span className="block text-[10px] text-gold uppercase tracking-widest mt-1">
             Admin Console
           </span>
@@ -325,7 +325,7 @@ export default function AdminPanel() {
               <Bell className="w-5 h-5 text-gray-400 hover:text-brandblack cursor-pointer" />
             </div>
             <div className="flex items-center gap-3 pl-6 border-l border-gray-100">
-              <div className="w-8 h-8 bg-brandblack rounded-full flex items-center justify-center text-gold font-serif">
+              <div className="w-8 h-8 bg-brandblack rounded-full flex items-center justify-center text-gold">
                 A
               </div>
               <div className="hidden md:block">
@@ -345,7 +345,7 @@ export default function AdminPanel() {
                 <div className="bg-white p-6 rounded-sm border border-gray-100 shadow-sm flex justify-between">
                   <div>
                     <p className="text-xs text-gray-500 uppercase">Revenue</p>
-                    <h3 className="text-2xl font-serif">
+                    <h3 className="text-2xl">
                       ${revenue.toLocaleString()}
                     </h3>
                   </div>
@@ -358,7 +358,7 @@ export default function AdminPanel() {
                     <p className="text-xs text-gray-500 uppercase">
                       Active Orders
                     </p>
-                    <h3 className="text-2xl font-serif">{activeOrders}</h3>
+                    <h3 className="text-2xl">{activeOrders}</h3>
                   </div>
                   <div className="p-3 bg-gray-50 rounded-full text-brandblack">
                     <ShoppingBag className="w-5 h-5" />
@@ -367,7 +367,7 @@ export default function AdminPanel() {
                 <div className="bg-white p-6 rounded-sm border border-gray-100 shadow-sm flex justify-between">
                   <div>
                     <p className="text-xs text-gray-500 uppercase">Products</p>
-                    <h3 className="text-2xl font-serif">{products.length}</h3>
+                    <h3 className="text-2xl">{products.length}</h3>
                   </div>
                   <div className="p-3 bg-gray-50 rounded-full text-brandblack">
                     <Package className="w-5 h-5" />
@@ -376,7 +376,7 @@ export default function AdminPanel() {
                 <div className="bg-white p-6 rounded-sm border border-gray-100 shadow-sm flex justify-between">
                   <div>
                     <p className="text-xs text-gray-500 uppercase">Clients</p>
-                    <h3 className="text-2xl font-serif">{clients.length}</h3>
+                    <h3 className="text-2xl">{clients.length}</h3>
                   </div>
                   <div className="p-3 bg-gray-50 rounded-full text-brandblack">
                     <Users className="w-5 h-5" />
@@ -391,7 +391,7 @@ export default function AdminPanel() {
                     <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
                       <TrendingUp className="w-4 h-4" />
                     </div>
-                    <h3 className="font-serif text-lg">Revenue Trend</h3>
+                    <h3 className="text-lg">Revenue Trend</h3>
                   </div>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -432,7 +432,7 @@ export default function AdminPanel() {
                     <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
                       <PieChartIcon className="w-4 h-4" />
                     </div>
-                    <h3 className="font-serif text-lg">
+                    <h3 className="text-lg">
                       Inventory Distribution
                     </h3>
                   </div>
@@ -479,7 +479,7 @@ export default function AdminPanel() {
               {/* Recent Activity Table using Real Data */}
               <div className="bg-white border border-gray-100 rounded-sm shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                  <h3 className="font-serif text-lg">Recent Orders</h3>
+                  <h3 className="text-lg">Recent Orders</h3>
                 </div>
                 <table className="w-full text-left">
                   <thead className="bg-gray-50 text-xs uppercase text-gray-500 font-medium">
@@ -609,7 +609,7 @@ export default function AdminPanel() {
           {/* Orders View */}
           {activeTab === "orders" && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-serif">All Orders</h2>
+              <h2 className="text-2xl">All Orders</h2>
               <div className="bg-white border border-gray-100 rounded-sm shadow-sm overflow-hidden">
                 <table className="w-full text-left">
                   <thead className="bg-gray-50 text-xs uppercase text-gray-500 font-medium">

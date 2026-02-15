@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "../components/AuthProvider";
+import ClientLayout from "./ClientLayout";
 
 export const metadata: Metadata = {
   title: "Lunestra & Co.",
@@ -28,11 +30,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-ui antialiased text-brandblack">
-        <Navbar />
-        <main className="font-sans selection:bg-sapphire selection:text-white bg-white">
-          {children}
-        </main>
-        <Footer />
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

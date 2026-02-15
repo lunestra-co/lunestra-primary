@@ -1,79 +1,108 @@
 "use client";
-import React from "react";
-
-// Mock user and orders data
-const user = {
-  name: "Mrs. Vanderbilt",
-  email: "vanderbilt@email.com",
-  phone: "+1 555-123-4567",
-  joined: "January 2022",
-  avatar:
-    "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=100&q=80",
-};
-
-const orders = [
-  {
-    id: "ORD-1001",
-    date: "2024-01-10",
-    status: "Delivered",
-    total: "$12,500",
-    items: [
-      {
-        name: "Royal Blue Sapphire Ring",
-        image:
-          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
-        price: "$8,000",
-        qty: 1,
-      },
-      {
-        name: "Emerald Pendant Necklace",
-        image:
-          "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
-        price: "$4,500",
-        qty: 1,
-      },
-    ],
-  },
-  {
-    id: "ORD-1000",
-    date: "2023-11-22",
-    status: "Delivered",
-    total: "$3,200",
-    items: [
-      {
-        name: "Classic Diamond Studs",
-        image:
-          "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
-        price: "$3,200",
-        qty: 1,
-      },
-    ],
-  },
-  {
-    id: "ORD-0999",
-    date: "2023-09-05",
-    status: "Cancelled",
-    total: "$2,000",
-    items: [
-      {
-        name: "Ruby Tennis Bracelet",
-        image:
-          "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
-        price: "$2,000",
-        qty: 1,
-      },
-    ],
-  },
-];
-
-import { useState } from "react";
+import React, { useState } from "react";
+import { useAuth } from "@/components/AuthProvider";
+import AuthForm from "@/components/AuthForm";
+import ProfileForm from "@/components/ProfileForm";
+import { createClient } from "@/lib/supabase/client";
+import { useEffect, useCallback } from "react";
+import { getUserOrders } from "@/services/OrderService";
+import type { Order } from "@/services/OrderService";
+import { useRef } from "react";
 
 export default function ProfilePage() {
+  const { user, loading } = useAuth();
   const [tab, setTab] = useState("orders");
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState<string | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileExists, setProfileExists] = useState<boolean | null>(null);
+  const [profile, setProfile] = useState<{
+    first_name?: string;
+    last_name?: string;
+  } | null>(null);
+
+  const fetchOrders = useCallback(async () => {
+    if (!user) return;
+    setOrdersLoading(true);
+    setOrdersError(null);
+    try {
+      // Fetch orders for the current user
+      const userOrders = await getUserOrders(user.id);
+      setOrders(userOrders || []);
+    } catch (e) {
+      setOrdersError("Failed to load orders");
+    } finally {
+      setOrdersLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) fetchOrders();
+  }, [user, fetchOrders]);
+
+  useEffect(() => {
+    const checkProfile = async () => {
+      if (!user) return;
+      setProfileLoading(true);
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, first_name, last_name")
+        .eq("id", user.id)
+        .single();
+      setProfileExists(!!data && !error);
+      setProfile(data || null);
+      setProfileLoading(false);
+    };
+    if (user) checkProfile();
+  }, [user]);
+
+  if (loading || profileLoading) {
+    return <div className="text-center py-20">Loading...</div>;
+  }
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#FDFBF7] text-brandblack flex items-center justify-center">
+        <AuthForm />
+      </div>
+    );
+  }
+  if (profileExists === false) {
+    return (
+      <div className="min-h-screen bg-[#FDFBF7] text-brandblack flex items-center justify-center">
+        <ProfileForm onSaved={() => setProfileExists(true)} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-brandblack">
       <div className="max-w-5xl mx-auto px-6 py-20">
+        {/* User Info Bar */}
+        <div className="flex items-center justify-between bg-white rounded-lg shadow px-6 py-4 mb-8">
+          <div className="flex items-center gap-4">
+            <img
+              src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                (profile?.first_name || "U") +
+                  " " +
+                  (profile?.last_name || "S"),
+              )}`}
+              alt="User Avatar"
+              className="w-12 h-12 rounded-full border"
+            />
+            <div>
+              <div className="font-serif text-lg">
+                Hey{" "}
+                {profile?.first_name
+                  ? profile.first_name
+                  : user.email?.split("@")[0] || "User"}
+                !
+              </div>
+              <div className="text-gray-500 text-sm">{user.email}</div>
+            </div>
+          </div>
+        </div>
         {/* Tabs */}
         <div className="flex border-b border-gold mb-12 gap-2">
           <button
@@ -108,73 +137,81 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* Tab Content */}
         {tab === "orders" && (
           <div>
-            <h2 className="font-serif text-2xl mb-8">Order History</h2>
-            {orders.length === 0 ? (
-              <div className="text-gray-400 italic">No past orders found.</div>
+            <h2 className="font-serif text-2xl mb-8">Your Orders</h2>
+            {ordersLoading ? (
+              <div className="text-gray-400 italic">Loading orders...</div>
+            ) : ordersError ? (
+              <div className="text-red-500 italic">{ordersError}</div>
+            ) : orders.length === 0 ? (
+              <div className="text-gray-400 italic">No orders found.</div>
             ) : (
-              <div className="space-y-10">
-                {orders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="bg-white shadow border-l-4 border-gold p-8 rounded-lg"
-                  >
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2">
-                      <div className="flex flex-col md:flex-row md:items-center gap-4">
-                        <span className="text-xs uppercase tracking-widest text-gray-400 font-bold">
-                          Order #{order.id}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          {order.date}
-                        </span>
-                        <span
-                          className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                            order.status === "Delivered"
-                              ? "bg-green-100 text-green-700"
-                              : order.status === "Cancelled"
-                                ? "bg-red-100 text-red-700"
-                                : "bg-yellow-100 text-yellow-700"
-                          }`}
-                        >
-                          {order.status}
-                        </span>
-                      </div>
-                      <div className="text-lg font-serif">{order.total}</div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {order.items.map((item, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-4 bg-gray-50 p-4 rounded"
-                        >
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-16 h-16 object-cover rounded border"
-                          />
-                          <div>
-                            <div className="font-serif text-base mb-1">
-                              {item.name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {item.price} &times; {item.qty}
-                            </div>
-                          </div>
+              <div className="space-y-12">
+                {orders.map((order) => {
+                  let items: any[] = [];
+                  try {
+                    items = Array.isArray(order.items)
+                      ? order.items
+                      : order.items
+                        ? JSON.parse(order.items as any)
+                        : [];
+                  } catch {
+                    items = [];
+                  }
+                  return (
+                    <div
+                      key={order.id}
+                      className="bg-white shadow border-l-4 border-gold p-6 rounded-lg mb-4"
+                    >
+                      <div className="flex justify-between items-center mb-4">
+                        <div>
+                          <span className="font-serif text-lg mr-4">
+                            Order #{order.order_seq}
+                          </span>
+                          <span className="text-xs text-gray-500 mr-4">
+                            {order.created_at
+                              ? new Date(order.created_at).toLocaleDateString()
+                              : ""}
+                          </span>
+                          <span
+                            className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                              order.status === "Delivered"
+                                ? "bg-green-100 text-green-700"
+                                : order.status === "Cancelled"
+                                  ? "bg-red-100 text-red-700"
+                                  : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            {order.status}
+                          </span>
                         </div>
-                      ))}
+                        <div className="text-lg font-serif">
+                          {order.total ? `₹${order.total}` : ""}
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-500 mb-2">
+                        {items.length > 0
+                          ? items.map((item, idx) => (
+                              <span key={idx}>
+                                {item.product_name}
+                                {item.quantity ? ` × ${item.quantity}` : ""}
+                                {idx < items.length - 1 ? ", " : ""}
+                              </span>
+                            ))
+                          : "No products"}
+                      </div>
+                      <div className="mt-6 flex justify-end">
+                        <a
+                          href={`/account/${order.id}`}
+                          className="inline-block px-5 py-2 bg-gold text-white font-serif rounded shadow hover:bg-yellow-600 transition-colors text-sm"
+                        >
+                          View Order
+                        </a>
+                      </div>
                     </div>
-                    <div className="mt-6 flex justify-end">
-                      <a
-                        href={`/private-vault/${order.id}`}
-                        className="inline-block px-5 py-2 bg-gold text-white font-serif rounded shadow hover:bg-yellow-600 transition-colors text-sm"
-                      >
-                        View Order
-                      </a>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

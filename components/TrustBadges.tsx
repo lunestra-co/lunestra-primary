@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const BADGES = [
   {
@@ -78,8 +78,7 @@ const BADGES = [
       </svg>
     ),
     title: "Lifetime Guidance",
-    description:
-      "Lifetime support, appraisals, and expert advice, always complimentary.",
+    description: "Lifetime support, appraisals, and expert advice-always free.",
   },
 ];
 
@@ -87,43 +86,86 @@ import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
 export default function TrustBadges() {
   const { ref, isVisible } = useScrollAnimation();
+  const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    // Set isMobile on mount and on resize
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Auto-slide for mobile with fade animation
+  useEffect(() => {
+    if (!isMobile) return;
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrent((prev) => (prev === BADGES.length - 1 ? 0 : prev + 1));
+        setFade(true);
+      }, 200); // fade out duration
+    }, 4000); // total duration per slide
+    return () => clearInterval(interval);
+  }, [isMobile]);
 
   return (
-    <section className="py-16 md:py-20 bg-ivory relative overflow-hidden">
+    <section className="py-16 bg-ivory relative overflow-hidden">
       {/* Decorative background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-sapphire rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-6 lg:px-12 relative" ref={ref}>
+      <div className="max-w-400 mx-auto px-6 lg:px-12 relative" ref={ref}>
+        {/* Mobile carousel */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 transition-all duration-1000 transform ${
+          className={`block md:hidden transition-all duration-1000 transform ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
+        >
+          <div className="flex items-center justify-center relative">
+            <div className="flex-1 flex justify-center">
+              <div
+                className={`flex flex-col items-center text-center w-full max-w-xs mx-auto transition-opacity duration-300 ${fade ? "opacity-100" : "opacity-0"}`}
+              >
+                <div className="text-gold mb-4">{BADGES[current].icon}</div>
+                <h3 className="font-serif text-lg text-brandblack mb-2">
+                  {BADGES[current].title}
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed max-w-60">
+                  {BADGES[current].description}
+                </p>
+              </div>
+            </div>
+          </div>
+          {/* Dots indicator */}
+          <div className="flex justify-center mt-6 gap-2">
+            {BADGES.map((_, idx) => (
+              <span
+                key={idx}
+                className={`w-2 h-2 rounded-full ${idx === current ? "bg-gold" : "bg-gold/30"}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop grid */}
+        <div
+          className={`hidden md:grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 transition-all duration-1000 transform ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
         >
           {BADGES.map((badge, index) => (
-            <div
-              key={index}
-              className="group flex flex-col items-center text-center"
-            >
-              {/* Icon with hover effect */}
-              <div className="text-gold mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-1">
-                {badge.icon}
-              </div>
-
-              {/* Title */}
-              <h3 className="font-serif text-lg text-brandblack mb-2 group-hover:text-sapphire transition-colors">
+            <div key={index} className="flex flex-col items-center text-center">
+              <div className="text-gold mb-6">{badge.icon}</div>
+              <h3 className="font-serif text-lg text-brandblack mb-2">
                 {badge.title}
               </h3>
-
-              {/* Description */}
-              <p className="text-gray-500 text-sm leading-relaxed max-w-[240px]">
+              <p className="text-gray-500 text-sm leading-relaxed max-w-60">
                 {badge.description}
               </p>
-
-              {/* Decorative underline */}
-              <div className="w-8 h-px bg-gold/30 mt-6 group-hover:w-16 transition-all duration-500" />
+              <div className="w-8 h-px bg-gold/30 mt-6" />
             </div>
           ))}
         </div>
