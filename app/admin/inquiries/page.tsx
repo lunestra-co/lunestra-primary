@@ -36,7 +36,9 @@ export default function Inquiries() {
               <td className="px-6 py-4 text-xs whitespace-nowrap">
                 {inquiry.whatsapp_number}
               </td>
-              <td className="px-6 py-4 text-xs whitespace-nowrap">{inquiry.product_type}</td>
+              <td className="px-6 py-4 text-xs whitespace-nowrap">
+                {inquiry.product_type}
+              </td>
               <td className="px-6 py-4 text-xs">{inquiry.product_name}</td>
               <td className="px-6 py-4">
                 <select

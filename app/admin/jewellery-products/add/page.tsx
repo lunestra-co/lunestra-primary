@@ -167,7 +167,9 @@ export default function AddJewelleryProduct() {
                 type="number"
                 className="w-full bg-gray-50 border border-gray-200 p-3 text-sm focus:outline-none focus:border-gold"
                 value={formData.price}
-                onChange={(e) => handleChange("price", parseInt(e.target.value))}
+                onChange={(e) =>
+                  handleChange("price", parseInt(e.target.value))
+                }
               />
             </div>
             <div>
@@ -352,7 +354,9 @@ export default function AddJewelleryProduct() {
                 type="text"
                 className="w-full bg-gray-50 border border-gray-200 p-3 text-sm focus:outline-none focus:border-gold"
                 value={formData.hallmark_details}
-                onChange={(e) => handleChange("hallmark_details", e.target.value)}
+                onChange={(e) =>
+                  handleChange("hallmark_details", e.target.value)
+                }
               />
             </div>
           </div>
@@ -377,7 +381,9 @@ export default function AddJewelleryProduct() {
                 type="text"
                 className="w-full bg-gray-50 border border-gray-200 p-3 text-sm focus:outline-none focus:border-gold"
                 value={formData.secondary_gem_details}
-                onChange={(e) => handleChange("secondary_gem_details", e.target.value)}
+                onChange={(e) =>
+                  handleChange("secondary_gem_details", e.target.value)
+                }
               />
             </div>
           </div>
@@ -415,7 +421,9 @@ export default function AddJewelleryProduct() {
               type="checkbox"
               className="w-4 h-4"
               checked={formData.can_get_certificate}
-              onChange={(e) => handleChange("can_get_certificate", e.target.checked)}
+              onChange={(e) =>
+                handleChange("can_get_certificate", e.target.checked)
+              }
             />
           </div>
 

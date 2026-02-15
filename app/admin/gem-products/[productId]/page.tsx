@@ -44,9 +44,15 @@ export default function GemProductDetail() {
         <div className="flex justify-between items-start mb-6">
           <div>
             <h1 className="text-2xl">{product.name}</h1>
-            <p className="text-sm text-gray-500 mt-2">Product ID: {product.id}</p>
-            <p className="text-sm text-gray-500 mt-2">Slug: {product.slug || '-'}</p>
-            <p className="text-sm text-gray-500 mt-2">Category ID: {product.category_id || '-'}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Product ID: {product.id}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Slug: {product.slug || "-"}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Category ID: {product.category_id || "-"}
+            </p>
           </div>
           <div className="text-right">
             <span
@@ -75,7 +81,9 @@ export default function GemProductDetail() {
           <div>
             <p className="text-xs text-gray-500 uppercase mb-1">Sale Price</p>
             <p className="text-2xl text-brandblack">
-              {product.sale_price ? `Rs.${(product.sale_price || 0).toLocaleString()}` : "-"}
+              {product.sale_price
+                ? `Rs.${(product.sale_price || 0).toLocaleString()}`
+                : "-"}
             </p>
           </div>
           <div>
@@ -129,15 +137,17 @@ export default function GemProductDetail() {
           <div className="space-y-3">
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Rarity Score</span>
-              <span className="font-medium">{product.rarity_score || '-'}</span>
+              <span className="font-medium">{product.rarity_score || "-"}</span>
             </div>
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Rarity Percentile</span>
-              <span className="font-medium">{product.rarity_percentile || '-'}</span>
+              <span className="font-medium">
+                {product.rarity_percentile || "-"}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Rarity Scope</span>
-              <span className="font-medium">{product.rarity_scope || '-'}</span>
+              <span className="font-medium">{product.rarity_scope || "-"}</span>
             </div>
           </div>
         </div>
@@ -150,19 +160,29 @@ export default function GemProductDetail() {
           <div className="space-y-3">
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Certification</span>
-              <span className="font-medium">{product.certification || '-'}</span>
+              <span className="font-medium">
+                {product.certification || "-"}
+              </span>
             </div>
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Can Get Certificate</span>
-              <span className="font-medium">{product.can_get_certificate ? 'Yes' : 'No'}</span>
+              <span className="font-medium">
+                {product.can_get_certificate ? "Yes" : "No"}
+              </span>
             </div>
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Certificate Price</span>
-              <span className="font-medium">{product.certificate_price ? `Rs.${product.certificate_price}` : '-'}</span>
+              <span className="font-medium">
+                {product.certificate_price
+                  ? `Rs.${product.certificate_price}`
+                  : "-"}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Certificate Description</span>
-              <span className="font-medium">{product.certificate_description || '-'}</span>
+              <span className="font-medium">
+                {product.certificate_description || "-"}
+              </span>
             </div>
           </div>
         </div>
@@ -172,7 +192,7 @@ export default function GemProductDetail() {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-gray-600">Pricing Type</span>
-              <span className="font-medium">{product.pricing_type || '-'}</span>
+              <span className="font-medium">{product.pricing_type || "-"}</span>
             </div>
           </div>
         </div>

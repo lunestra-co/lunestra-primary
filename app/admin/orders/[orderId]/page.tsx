@@ -61,13 +61,19 @@ export default function OrderDetail() {
           <div>
             <h1 className="text-2xl">ORD-{order.order_seq}</h1>
             <p className="text-sm text-gray-500 mt-1">Order ID: {order.id}</p>
-            <p className="text-sm text-gray-500 mt-1">Order Number: {order.order_number || '-'}</p>
-            <p className="text-sm text-gray-500 mt-1">User ID: {order.user_id || '-'}</p>
             <p className="text-sm text-gray-500 mt-1">
-              Created: {new Date(order.created_at || "").toLocaleString("en-IN")}
+              Order Number: {order.order_number || "-"}
             </p>
             <p className="text-sm text-gray-500 mt-1">
-              Updated: {new Date(order.updated_at || "").toLocaleString("en-IN")}
+              User ID: {order.user_id || "-"}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Created:{" "}
+              {new Date(order.created_at || "").toLocaleString("en-IN")}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Updated:{" "}
+              {new Date(order.updated_at || "").toLocaleString("en-IN")}
             </p>
           </div>
           <div className="text-right">
@@ -98,8 +104,10 @@ export default function OrderDetail() {
             <p className="text-lg font-medium">{order.status}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase mb-1">Payment Method</p>
-            <p className="text-lg font-medium">{order.payment_method || '-'}</p>
+            <p className="text-xs text-gray-500 uppercase mb-1">
+              Payment Method
+            </p>
+            <p className="text-lg font-medium">{order.payment_method || "-"}</p>
           </div>
         </div>
       </div>
@@ -164,7 +172,7 @@ export default function OrderDetail() {
                       {item.product_name}
                     </td>
                     <td className="px-6 py-4 text-xs">
-                      {item.selected_size || '-'}
+                      {item.selected_size || "-"}
                     </td>
                     <td className="px-6 py-4">
                       Rs.{(item.price || 0).toLocaleString()}
@@ -174,7 +182,9 @@ export default function OrderDetail() {
                       {item.needs_certificate ? "Yes" : "No"}
                     </td>
                     <td className="px-6 py-4">
-                      {item.certificate_price ? `Rs.${(item.certificate_price || 0).toLocaleString()}` : '-'}
+                      {item.certificate_price
+                        ? `Rs.${(item.certificate_price || 0).toLocaleString()}`
+                        : "-"}
                     </td>
                     <td className="px-6 py-4 text-right font-medium">
                       Rs.
@@ -211,9 +221,9 @@ export default function OrderDetail() {
             {order.payment_slip_url && (
               <div className="flex justify-between pb-3 border-b border-gray-100">
                 <span className="text-sm text-gray-600">Payment Slip:</span>
-                <a 
-                  href={order.payment_slip_url} 
-                  target="_blank" 
+                <a
+                  href={order.payment_slip_url}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-blue-600 hover:underline text-xs"
                 >
@@ -243,7 +253,9 @@ export default function OrderDetail() {
           <div className="space-y-3">
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-sm text-gray-600">Crafting Voucher:</span>
-              <span className="font-medium">{order.add_crafting_voucher ? 'Yes' : 'No'}</span>
+              <span className="font-medium">
+                {order.add_crafting_voucher ? "Yes" : "No"}
+              </span>
             </div>
             {order.voucher_price && (
               <div className="flex justify-between pb-3 border-b border-gray-100">
@@ -255,7 +267,7 @@ export default function OrderDetail() {
             )}
             <div className="flex justify-between">
               <span className="text-sm text-gray-600">Selected Shop:</span>
-              <span className="font-medium">{order.selected_shop || '-'}</span>
+              <span className="font-medium">{order.selected_shop || "-"}</span>
             </div>
           </div>
         </div>

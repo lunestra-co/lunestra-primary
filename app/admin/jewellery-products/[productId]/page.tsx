@@ -44,9 +44,15 @@ export default function JewelleryProductDetail() {
         <div className="flex justify-between items-start mb-6">
           <div>
             <h1 className="text-2xl">{product.name}</h1>
-            <p className="text-sm text-gray-500 mt-2">Product ID: {product.id}</p>
-            <p className="text-sm text-gray-500 mt-2">Slug: {product.slug || '-'}</p>
-            <p className="text-sm text-gray-500 mt-2">Category ID: {product.category_id || '-'}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Product ID: {product.id}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Slug: {product.slug || "-"}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Category ID: {product.category_id || "-"}
+            </p>
           </div>
           <div className="text-right">
             <span
@@ -113,7 +119,9 @@ export default function JewelleryProductDetail() {
           <div className="space-y-3">
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Primary Gem Type</span>
-              <span className="font-medium">{product.primary_gem_type || "-"}</span>
+              <span className="font-medium">
+                {product.primary_gem_type || "-"}
+              </span>
             </div>
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Setting Type</span>
@@ -121,7 +129,9 @@ export default function JewelleryProductDetail() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Secondary Gem Details</span>
-              <span className="font-medium">{product.secondary_gem_details || "-"}</span>
+              <span className="font-medium">
+                {product.secondary_gem_details || "-"}
+              </span>
             </div>
           </div>
         </div>
@@ -134,11 +144,15 @@ export default function JewelleryProductDetail() {
           <div className="space-y-3">
             <div className="flex justify-between pb-3 border-b border-gray-100">
               <span className="text-gray-600">Craftsmanship</span>
-              <span className="font-medium">{product.craftsmanship || "-"}</span>
+              <span className="font-medium">
+                {product.craftsmanship || "-"}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Hallmark Details</span>
-              <span className="font-medium">{product.hallmark_details || "-"}</span>
+              <span className="font-medium">
+                {product.hallmark_details || "-"}
+              </span>
             </div>
           </div>
         </div>
@@ -171,15 +185,23 @@ export default function JewelleryProductDetail() {
         <div className="space-y-3">
           <div className="flex justify-between pb-3 border-b border-gray-100">
             <span className="text-gray-600">Can Get Certificate</span>
-            <span className="font-medium">{product.can_get_certificate ? "Yes" : "No"}</span>
+            <span className="font-medium">
+              {product.can_get_certificate ? "Yes" : "No"}
+            </span>
           </div>
           <div className="flex justify-between pb-3 border-b border-gray-100">
             <span className="text-gray-600">Certificate Price</span>
-            <span className="font-medium">{product.certificate_price ? `Rs.${product.certificate_price}` : "-"}</span>
+            <span className="font-medium">
+              {product.certificate_price
+                ? `Rs.${product.certificate_price}`
+                : "-"}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Certificate Description</span>
-            <span className="font-medium">{product.certificate_description || "-"}</span>
+            <span className="font-medium">
+              {product.certificate_description || "-"}
+            </span>
           </div>
         </div>
       </div>

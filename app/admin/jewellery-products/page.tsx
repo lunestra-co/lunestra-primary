@@ -52,7 +52,9 @@ export default function JewelleryProducts() {
                   <td className="px-6 py-4 font-medium">{product.name}</td>
                   <td className="px-6 py-4">Rs.{product.price}</td>
                   <td className="px-6 py-4">{product.metal_type || "-"}</td>
-                  <td className="px-6 py-4">{product.primary_gem_type || "-"}</td>
+                  <td className="px-6 py-4">
+                    {product.primary_gem_type || "-"}
+                  </td>
                   <td className="px-6 py-4">{product.style || "-"}</td>
                   <td className="px-6 py-4">
                     <span
