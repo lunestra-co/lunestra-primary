@@ -4,7 +4,7 @@ import { Home as House } from "lucide-react";
 
 type PageProps = {
   params: { variety: string };
-  searchParams?: { price?: string; weight?: string };
+  searchParams?: { price?: string; weight?: string; tag?: string };
 };
 
 export default async function CollectionPage(props: PageProps) {
@@ -47,6 +47,10 @@ export default async function CollectionPage(props: PageProps) {
     const [min, max] = searchParams.weight.split("-").map(Number);
     if (!isNaN(min)) query = query.gte("weight", min);
     if (!isNaN(max)) query = query.lte("weight", max);
+  }
+  // Tag filter (badge)
+  if (searchParams?.tag) {
+    query = query.eq("badge", searchParams.tag);
   }
 
   const { data: products, error: prodError } = await query;

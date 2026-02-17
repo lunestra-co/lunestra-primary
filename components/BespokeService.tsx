@@ -97,7 +97,10 @@ export default function BespokeService() {
             </ul>
 
             <div className="pt-6">
-              <a href="#shops" className="group inline-flex items-center gap-4">
+              <a
+                href="/jewellery-coupon"
+                className="group inline-flex items-center gap-4"
+              >
                 <span className="border border-white/30 text-white px-8 py-4 text-[11px] uppercase tracking-[0.2em] transition-all duration-500 group-hover:border-gold group-hover:bg-gold group-hover:text-brandblack">
                   Discover Our Partners →
                 </span>

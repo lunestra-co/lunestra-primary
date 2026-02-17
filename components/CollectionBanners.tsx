@@ -15,9 +15,9 @@ export default function CollectionBanners() {
       ref={ref}
     >
       {/* Top Two Banners - Side by Side */}
-      <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="grid grid-cols-2">
         {/* Left Banner - Collector's Picks */}
-        <div className="relative h-[550px] lg:h-[650px] overflow-hidden group cursor-pointer">
+        <div className="relative h-[450px] lg:h-[650px] overflow-hidden group cursor-pointer">
           <div className="absolute inset-0 bg-sapphire" />
           <img
             src="https://www.ceylonstones.com.au/cdn/shop/files/IMG_0023-2_800x.jpg?v=1635301752"
@@ -41,7 +41,7 @@ export default function CollectionBanners() {
             </p>
 
             <a
-              href="#collection"
+              href="/gems/all?tag=collector-picks"
               className="relative overflow-hidden border border-white/40 text-white px-10 py-4 text-[10px] uppercase tracking-[0.25em] transition-all duration-500 group-hover:border-gold group-hover:bg-gold group-hover:text-brandblack"
             >
               Discover
@@ -50,7 +50,7 @@ export default function CollectionBanners() {
         </div>
 
         {/* Right Banner - New Arrivals */}
-        <div className="relative h-[550px] lg:h-[650px] overflow-hidden group cursor-pointer">
+        <div className="relative h-[450px] lg:h-[650px] overflow-hidden group cursor-pointer">
           <div className="absolute inset-0 bg-sapphire" />
           <img
             src="https://cablankatours.com/wp-content/uploads/2023/03/5.jpg"
@@ -74,7 +74,7 @@ export default function CollectionBanners() {
             </p>
 
             <a
-              href="#collection"
+              href="/gems/all?tag=new-arrivals"
               className="relative overflow-hidden border border-white/40 text-white px-10 py-4 text-[10px] uppercase tracking-[0.25em] transition-all duration-500 group-hover:border-gold group-hover:bg-gold group-hover:text-brandblack"
             >
               Discover
@@ -112,7 +112,7 @@ export default function CollectionBanners() {
             </p>
 
             <a
-              href="#collection"
+              href="/gems/navaratna"
               className="group inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-brandblack font-medium transition-colors hover:text-gold"
             >
               <span className="border-b border-brandblack pb-1 group-hover:border-gold transition-colors">

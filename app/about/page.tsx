@@ -1,12 +1,13 @@
 "use client";
 import Button from "@/components/Button";
+import Pedigree from "@/components/Pedigree";
 import Link from "next/link";
 
 export default function AboutUsPage() {
   return (
     <section className="min-h-screen py-20 mt-12">
-      <div className="max-w-4xl mx-auto px-6 lg:px-0">
-        <div className="mb-12 text-center">
+      <div className="px-6 lg:px-0">
+        <div className="max-w-4xl mx-auto mb-12 text-center">
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-sapphire mb-4 tracking-tight animate-fade-in-up">
             The Pedigree of the Earth
           </h1>
@@ -18,7 +19,7 @@ export default function AboutUsPage() {
           </p>
         </div>
 
-        <div className="space-y-10 text-lg text-brandblack/90 font-light leading-relaxed animate-fade-in-up">
+        <div className="max-w-4xl mx-auto space-y-10 text-lg text-brandblack/90 font-light leading-relaxed animate-fade-in-up">
           <section>
             <p>
               At <span className="font-bold text-sapphire">Lunestra & Co.</span>
@@ -135,7 +136,12 @@ export default function AboutUsPage() {
           </section>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 justify-center mt-16 animate-fade-in-up">
+        {/* Pedigree section moved from Home page */}
+        <div className="mt-24">
+          <Pedigree />
+        </div>
+
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-4 justify-center mt-16 animate-fade-in-up">
           <Link href="/gems">
             <Button variant="primary">Explore the Full Collection</Button>
           </Link>

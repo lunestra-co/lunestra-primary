@@ -21,7 +21,7 @@ export default function RequestQuotationBanner() {
         </p>
 
         <a
-          href="#consultation"
+          href="/request"
           className="inline-flex items-center gap-4 bg-white text-brandblack px-8 py-4 text-xs uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-all duration-300"
         >
           Request a Quotation

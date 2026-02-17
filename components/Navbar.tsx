@@ -622,8 +622,8 @@ export default function Navbar() {
         }`}
       >
         <div className="p-6 flex justify-between items-center border-b border-gray-100">
-          <span className="font-serif text-2xl tracking-widest text-brandblack italic">
-            Lunestra
+          <span className="font-serif text-2xl uppercase font-medium text-brandblack tracking-tighter">
+            LUNESTRA & CO.
           </span>
           <button
             onClick={() => setIsMobileMenuOpen(false)}
@@ -632,39 +632,56 @@ export default function Navbar() {
             <X className="w-6 h-6" />
           </button>
         </div>
+
         <div className="flex flex-col p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-80px)]">
-          {[
-            { label: "High Jewelry", href: "/jewellery-shops" },
-            { label: "Gemstones", href: "/categories" },
-            { label: "Love & Engagement", href: "/collection" },
-            { label: "Heritage", href: "/contact" },
-            { label: "Investment", href: "/investment" },
-          ].map((item, idx) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${
-                isMobileMenuOpen
-                  ? "translate-x-0 opacity-100"
-                  : "-translate-x-4 opacity-0"
-              }`}
-              style={{ transitionDelay: `${idx * 100}ms` }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {/* Top-level nav links from desktop header */}
           <Link
-            href="/education-hub"
-            className={`text-lg uppercase tracking-widest font-sans text-brandblack italic transition-all duration-500 transform ${
-              isMobileMenuOpen
-                ? "translate-x-0 opacity-100"
-                : "-translate-x-4 opacity-0"
-            }`}
-            style={{ transitionDelay: "500ms" }}
+            href="/gems"
+            className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+            style={{ transitionDelay: `0ms` }}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            World of Lunestra
+            The Collection
+          </Link>
+          <Link
+            href="/jewellery"
+            className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+            style={{ transitionDelay: `100ms` }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Jewellery
+          </Link>
+          <Link
+            href="/request"
+            className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+            style={{ transitionDelay: `200ms` }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Request
+          </Link>
+          <Link
+            href="/journal"
+            className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+            style={{ transitionDelay: `300ms` }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Origin
+          </Link>
+          <Link
+            href="/about"
+            className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+            style={{ transitionDelay: `400ms` }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Our House
+          </Link>
+          <Link
+            href="/contact"
+            className={`text-lg uppercase tracking-widest font-sans text-brandblack transition-all duration-500 transform ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"}`}
+            style={{ transitionDelay: `500ms` }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Contact
           </Link>
 
           <div
@@ -673,18 +690,12 @@ export default function Navbar() {
             }`}
           >
             <Link
-              href="/consultation"
+              href="/account"
               className="block text-gold uppercase tracking-wider font-medium text-base"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Book an Appointment
+              Account
             </Link>
-            <a
-              href="tel:+1234567890"
-              className="block text-gray-400 font-serif italic text-base"
-            >
-              ( +123 ) 456 7890
-            </a>
           </div>
         </div>
       </div>
